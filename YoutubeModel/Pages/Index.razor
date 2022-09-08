@@ -1,0 +1,66 @@
+﻿@page "/"
+@using YoutubeModel.Data
+@inject YoutubeModel.Data.IServiceEmployee employeeService
+@inject MudBlazor.ISnackbar snackBar
+@using YoutubeModel.Model
+
+
+
+<MudCard Elevation="25">
+  
+    <MudCardContent>
+        <MudTextField @bind-Value="employee.Name" Label="First Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudTextField @bind-Value="employee.Email" Label="Phone Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Save">Save</MudButton>
+        <br />
+    
+    </MudCardContent>
+</MudCard>
+<br />
+<MudTable Elevation="25" Items="GetEmployees()" @bind-employee="employee">
+
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh> Name</MudTh>
+        <MudTh>eemail</MudTh>
+  
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="FirstName">@context.Email</MudTd>
+        <MudTd DataLabel="LastName">@context.Name</MudTd>
+   
+        
+    </RowTemplate>
+</MudTable>
+
+
+
+
+
+@code{
+    public Employee employee = new Employee();
+    public List<Employee> employees= new List<Employee>();
+
+    protected override async Task OnInitializedAsync(){
+
+        GetEmployees();
+
+    }
+
+    public  void Save(){
+        employeeService.SaveEmployee(employee);
+        employee = new Employee();
+        snackBar.Add(" added" , Severity.Success);
+        GetEmployees();
+    }
+
+    private List<Employee> GetEmployees(){
+        employees = employeeService.Getemployees();
+        return employees;
+    }
+
+
+
+
+}
